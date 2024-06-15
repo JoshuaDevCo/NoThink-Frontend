@@ -2,7 +2,7 @@ import axios from "axios";
 
 const client = axios.create({
   baseURL:
-    import.meta.env.VITE_PULIC_API_URL ||
+    import.meta.env.VITE_PUBLIC_API_URL ||
     "https://3ebf-95-105-67-206.ngrok-free.app",
 });
 
