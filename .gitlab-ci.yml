@@ -22,9 +22,7 @@ build:
     - docker build -t $IMAGE_NAME .
     - docker push $IMAGE_NAME
   only:
-    - master
-  tags:
-    - staging
+    - main
 
 deploy:
   variables:
@@ -44,9 +42,7 @@ deploy:
     - ssh -i $STAGING_SSH_KEY -o StrictHostKeyChecking=no staging@$SERVER_IP "docker run -d ${RUN_ARGS} --name nothink-miniapp-staging ${IMAGE_NAME}"
     # Тут может быть скрипт для SSH и запуска Docker контейнера на целевом сервере
   only:
-    - master
-  tags:
-    - staging
+    - main
 
 deploy_production:
   variables:
@@ -67,7 +63,5 @@ deploy_production:
     - ssh -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no production@$SERVER_IP "docker run -d ${RUN_ARGS} --name nothink-miniapp-production ${IMAGE_NAME}"
     # Тут может быть скрипт для SSH и запуска Docker контейнера на целевом сервере
   only:
-    - master
+    - main
   when: manual
-  tags:
-    - staging
