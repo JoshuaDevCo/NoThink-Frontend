@@ -1,5 +1,4 @@
 import { createStore } from "zustand";
-import { TCounterBooster } from "../types/booster";
 import { gameApi } from "../apis/game";
 
 export type TCounterStore = {
@@ -27,7 +26,6 @@ export type TCounterStore = {
   init: () => void;
   refresh: () => void;
   sync: () => Promise<void>;
-  applyBooster: (booster: TCounterBooster, ms: number) => void;
   startEnergyRecharge: () => number;
   setTapValue: (value: number) => void;
 };
@@ -208,10 +206,6 @@ export const CounterStore = createStore<TCounterStore>((set, get) => {
         }));
       }, 3000 * (1 - get().energy_recharge_time));
       return id;
-    },
-    applyBooster: (booster, ms) => {
-      set({ is_booster_active: true });
-      setTimeout(() => {}, ms);
     },
     setTapValue: (value) => {
       set({ tap_value: value });

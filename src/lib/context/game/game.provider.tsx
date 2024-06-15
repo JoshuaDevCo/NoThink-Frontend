@@ -16,7 +16,6 @@ import { useNotification } from "../notification/notification.provider";
 
 export const GameContext = createContext<IGameContext>({
   counter: {
-    applyBooster: () => {},
     refresh: () => {},
     inited: false,
     is_booster_active: false,
