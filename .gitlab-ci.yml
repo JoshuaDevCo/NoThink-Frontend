@@ -13,11 +13,7 @@ build:
     - gcloud auth activate-service-account --key-file=gcloud-service-key.json
     # - echo gcloud-service-key.json | docker login -u _json_key --password-stdin https://gcr.io
     - rm -f .env
-    - echo VITE_PUBLIC_NODE_RPC_URL=$VITE_PUBLIC_NODE_RPC_URL >> .env
-    - echo VITE_PUBLIC_NODE_FAUCET_URL=$VITE_PUBLIC_NODE_FAUCET_URL >> .env
-    - echo VITE_PUBLIC_NODE_API_URL=$VITE_PUBLIC_NODE_API_URL >> .env
     - echo VITE_PUBLIC_API_URL=$VITE_PUBLIC_API_URL >> .env
-    - echo VITE_PUBLIC_SOCKET_URL=$VITE_PUBLIC_SOCKET_URL >> .env
     - cat .env
     - docker build -t $IMAGE_NAME .
     - docker push $IMAGE_NAME
@@ -53,7 +49,6 @@ deploy_production:
     - chmod og= $PRODUCTION_SSH_KEY
     - echo $GCLOUD_SERVICE_KEY | base64 -d > gcloud-service-key.json
     - scp -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no gcloud-service-key.json production@$SERVER_IP:/tmp/gcloud-service-key.json
-
     - ssh -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no production@$SERVER_IP "cat /tmp/gcloud-service-key.json | docker login -u _json_key --password-stdin https://gcr.io"
     # - ssh -i $STAGING_SSH_KEY -o StrictHostKeyChecking=no staging@10.156.0.10 "gcloud auth activate-service-account --key-file=/tmp/gcloud-service-key.json"
     # - ssh -i $STAGING_SSH_KEY -o StrictHostKeyChecking=no staging@10.156.0.10 "rm keys.json"
