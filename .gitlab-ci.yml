@@ -22,7 +22,7 @@ build:
 
 deploy:
   variables:
-    SERVER_IP: 10.156.0.12
+    SERVER_IP: 35.246.133.24
   stage: deploy
   script:
     - chmod og= $STAGING_SSH_KEY
@@ -42,7 +42,7 @@ deploy:
 
 deploy_production:
   variables:
-    SERVER_IP: 10.156.0.12
+    SERVER_IP: 35.246.133.24
     RUN_ARGS: -p 2004:3000
   stage: deploy
   script:
