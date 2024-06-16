@@ -48,14 +48,14 @@ deploy_production:
   script:
     - chmod og= $PRODUCTION_SSH_KEY
     - echo $GCLOUD_SERVICE_KEY | base64 -d > gcloud-service-key.json
-    - scp -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no gcloud-service-key.json production@$SERVER_IP:/tmp/gcloud-service-key.json
-    - ssh -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no production@$SERVER_IP "cat /tmp/gcloud-service-key.json | docker login -u _json_key --password-stdin https://gcr.io"
+    - scp -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no gcloud-service-key.json staging@$SERVER_IP:/tmp/gcloud-service-key.json
+    - ssh -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no staging@$SERVER_IP "cat /tmp/gcloud-service-key.json | docker login -u _json_key --password-stdin https://gcr.io"
     # - ssh -i $STAGING_SSH_KEY -o StrictHostKeyChecking=no staging@10.156.0.10 "gcloud auth activate-service-account --key-file=/tmp/gcloud-service-key.json"
     # - ssh -i $STAGING_SSH_KEY -o StrictHostKeyChecking=no staging@10.156.0.10 "rm keys.json"
-    - ssh -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no production@$SERVER_IP "docker stop nothink-miniapp-production || true"
-    - ssh -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no production@$SERVER_IP "docker rm nothink-miniapp-production || true"
-    - ssh -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no production@$SERVER_IP "docker pull ${IMAGE_NAME}"
-    - ssh -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no production@$SERVER_IP "docker run -d ${RUN_ARGS} --name nothink-miniapp-production ${IMAGE_NAME}"
+    - ssh -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no staging@$SERVER_IP "docker stop nothink-miniapp-production || true"
+    - ssh -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no staging@$SERVER_IP "docker rm nothink-miniapp-production || true"
+    - ssh -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no staging@$SERVER_IP "docker pull ${IMAGE_NAME}"
+    - ssh -i $PRODUCTION_SSH_KEY -o StrictHostKeyChecking=no staging@$SERVER_IP "docker run -d ${RUN_ARGS} --name nothink-miniapp-production ${IMAGE_NAME}"
     # Тут может быть скрипт для SSH и запуска Docker контейнера на целевом сервере
   only:
     - main
