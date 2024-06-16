@@ -11,12 +11,12 @@ import { IndexPage } from "../pages/index";
 import { NotificationProvider } from "../lib/context/notification/notification.provider";
 
 export const App = ({ connected }: { connected: boolean }) => {
-  const navigator = useMemo(() => initNavigator("app-navigation-state"), []);
-  const [location, reactNavigator] = useIntegration(navigator);
+  const tmaNavigator = useMemo(() => initNavigator("app-navigation-state"), []);
+  const [location, reactNavigator] = useIntegration(tmaNavigator);
   useEffect(() => {
-    navigator.attach();
-    return () => navigator.detach();
-  }, [navigator]);
+    tmaNavigator.attach();
+    return () => tmaNavigator.detach();
+  }, [tmaNavigator]);
 
   return (
     <>
