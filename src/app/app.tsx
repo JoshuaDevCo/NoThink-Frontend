@@ -12,6 +12,9 @@ import { NotificationProvider } from "../lib/context/notification/notification.p
 
 export const App = ({ connected }: { connected: boolean }) => {
   const tmaNavigator = useMemo(() => initNavigator("app-navigation-state"), []);
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const [location, reactNavigator] = useIntegration(tmaNavigator);
   useEffect(() => {
     tmaNavigator.attach();
