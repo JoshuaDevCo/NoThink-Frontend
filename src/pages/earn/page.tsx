@@ -1,9 +1,9 @@
-import copy from "copy-to-clipboard";
 import { inviteApi } from "../../lib/apis/invite";
 import { useGame } from "../../lib/hooks/useGame";
 import { CoinIcon } from "../../assets/coin/icon";
 import { useLayoutEffect, useState } from "react";
 import cn from "classnames";
+import { makeInviteLink } from "../../lib/utils/invite-link";
 
 const BoughtIcon = () => (
   <svg
@@ -58,15 +58,13 @@ const BoughtIcon = () => (
 
 export const EarnPage = () => {
   const { challenge: challengeStore } = useGame();
-  const [copied, setCopied] = useState(false);
-  const handleGetLink = () => {
-    inviteApi.getLink().then((r) => {
-      copy(`t.me/no_think_coin_bot/startapp?startapp=${r.data._id}`);
-      setCopied(true);
-    });
-  };
+  const [inviteId, setInviteId] = useState<string | null>(null);
+
   useLayoutEffect(() => {
     challengeStore.init();
+    inviteApi.getLink().then((r) => {
+      setInviteId(r.data._id);
+    });
   }, []);
   return (
     <div className="absolute z-50 top-0 left-0 h-full w-full bg">
@@ -78,13 +76,14 @@ export const EarnPage = () => {
             successful referral.
           </div>
 
-          <button
-            onClick={handleGetLink}
+          <a
+            href={makeInviteLink(inviteId || "")}
             className={cn(
-              "mt-[30px] rounded-full flex gap-[10px] items-center p-[20px] w-full justify-center",
+              "button-bg-gradient mt-[30px] rounded-full flex gap-[10px] items-center p-[20px] w-full justify-center",
               {
-                "button-bg-gradient-dark": copied,
-                "button-bg-gradient": !copied,
+                // "button-bg-gradient-dark": copied,
+                // "button-bg-gradient": !copied,
+                "opacity-40 pointer-events-none": !inviteId,
               }
             )}
           >
@@ -126,10 +125,8 @@ export const EarnPage = () => {
               />
             </svg>
 
-            <span className="shrink-0 font-bold">
-              {!copied ? "Copy referral link" : "Link copied!"}
-            </span>
-          </button>
+            <span className="shrink-0 font-bold">Share invite link</span>
+          </a>
         </div>
 
         <div className="mt-[30px]">
@@ -185,7 +182,7 @@ export const EarnPage = () => {
           </div>
         </div>
 
-        <div className="mt-[30px]">
+        {/* <div className="mt-[30px]">
           <div className="font-black">How it works:</div>
 
           <p className="mt-[20px] text-white/70 font-bold text-[13px]">
@@ -196,7 +193,7 @@ export const EarnPage = () => {
             <br />
             Track referrals and ensure rewards are credited accurately.
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

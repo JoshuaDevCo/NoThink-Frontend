@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { CoinIcon } from "../../assets/coin/icon";
 import cn from "classnames";
 import { useLaunchParams } from "@tma.js/sdk-react";
 import { useGame } from "../../lib/hooks/useGame";
 import { inviteApi } from "../../lib/apis/invite";
-import copy from "copy-to-clipboard";
+import { makeInviteLink } from "../../lib/utils/invite-link";
 
 export const TablePage = () => {
   const { initData } = useLaunchParams();
@@ -12,13 +12,21 @@ export const TablePage = () => {
   const { count, total_balance } = counter;
   const { list, invited_list, place } = stat;
   const [activeTab, setActiveTab] = useState<"all" | "friends">("all");
-  const [copied, setCopied] = useState(false);
-  const handleGetLink = () => {
+  const [inviteId, setInviteId] = useState<string | null>(null);
+
+  // const handleGetLink = () => {
+  //   inviteApi.getLink().then((r) => {
+  //     copy(`t.me/no_think_coin_bot/startapp?startapp=${r.data._id}`);
+  //     setCopied(true);
+  //   });
+  // };
+
+  useLayoutEffect(() => {
     inviteApi.getLink().then((r) => {
-      copy(`t.me/no_think_coin_bot/startapp?startapp=${r.data._id}`);
-      setCopied(true);
+      setInviteId(r.data._id);
     });
-  };
+  }, []);
+
   return (
     <div className="absolute z-50 top-0 left-0 h-full w-full bg">
       <div
@@ -62,13 +70,12 @@ export const TablePage = () => {
         </div>
         {activeTab === "friends" && (
           <div>
-            <button
-              onClick={handleGetLink}
+            <a
+              href={makeInviteLink(inviteId || "")}
               className={cn(
-                "rounded-full flex gap-[10px] items-center p-[20px] w-full justify-center",
+                "button-bg-gradient rounded-full flex gap-[10px] items-center p-[20px] w-full justify-center",
                 {
-                  "button-bg-gradient-dark": copied,
-                  "button-bg-gradient": !copied,
+                  "opacity-40 pointer-events-none": !inviteId,
                 }
               )}
             >
@@ -110,10 +117,8 @@ export const TablePage = () => {
                 />
               </svg>
 
-              <span className="shrink-0 font-bold">
-                {!copied ? "Invite friends" : "Link copied!"}
-              </span>
-            </button>
+              <span className="shrink-0 font-bold">Invite friends</span>
+            </a>
           </div>
         )}
         <section className="flex flex-col gap-[3px]">
@@ -132,10 +137,12 @@ export const TablePage = () => {
                 <span className={cn({ "text-[#FEBDFF]": i + 1 === place })}>
                   #{i + 1}{" "}
                 </span>
-                <span className={cn({
-                  "font-bold": i + 1 !== place,
-                  "font-[860]": i + 1 === place,
-                })}>
+                <span
+                  className={cn({
+                    "font-bold": i + 1 !== place,
+                    "font-[860]": i + 1 === place,
+                  })}
+                >
                   {item.telegram_details?.username || item._id}
                 </span>
               </div>

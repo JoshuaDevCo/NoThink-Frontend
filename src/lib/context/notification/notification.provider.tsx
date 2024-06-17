@@ -106,32 +106,38 @@ export const NotificationProvider = ({ children }: PropsWithChildren) => {
               transition={{ duration: 0.3 }}
             >
               <div className="bg-[#4D1856]/[80%] rounded-[30px] p-[40px_50px] backdrop-blur-[20px] flex flex-nowrap overflow-hidden relative">
-                {notifications.map((notification, i) => (
-                  <div
-                    key={i}
-                    className="flex flex-col gap-[20px] w-full"
-                    style={{ transform: `translateX(${-100 * index}%)` }}
-                  >
-                    <div className="flex flex-col gap-[10px] items-center">
-                      {notification.type === "bot" && <NoThinkBotBoosterIcon />}
-                      {notification.type === "invited" && <CoinIcon className="w-[60px] h-[60px]" />}
-                      <div className="text-[30px] font-extrabold">
-                        {notification.label}
+                {notifications
+                  .filter((_, i) => i === index)
+                  .map((notification, i) => (
+                    <div
+                      key={i}
+                      className="flex flex-col gap-[20px] w-full"
+                      style={{ transform: `translateX(${-100 * index}%)` }}
+                    >
+                      <div className="flex flex-col gap-[10px] items-center">
+                        {notification.type === "bot" && (
+                          <NoThinkBotBoosterIcon />
+                        )}
+                        {notification.type === "invited" && (
+                          <CoinIcon className="w-[60px] h-[60px]" />
+                        )}
+                        <div className="text-[30px] font-extrabold">
+                          {notification.label}
+                        </div>
+                        <div className="text-[13px] text-[#D9A6E1] text-center">
+                          {notification.text}
+                        </div>
                       </div>
-                      <div className="text-[13px] text-[#D9A6E1] text-center">
-                        {notification.text}
-                      </div>
+                      {notifications.length - 1 == index && (
+                        <button
+                          className="button-bg-gradient p-[20px_60px] rounded-full font-bold"
+                          onClick={onClose}
+                        >
+                          OK, cool!
+                        </button>
+                      )}
                     </div>
-                    {notifications.length - 1 == index && (
-                      <button
-                        className="button-bg-gradient p-[20px_60px] rounded-full font-bold"
-                        onClick={onClose}
-                      >
-                        OK, cool!
-                      </button>
-                    )}
-                  </div>
-                ))}
+                  ))}
                 {notifications.length > 1 && (
                   <button
                     onClick={next}
@@ -154,7 +160,7 @@ export const NotificationProvider = ({ children }: PropsWithChildren) => {
                       {notifications.map((_, i) => (
                         <span
                           className={cn(
-                            "rounded-full bg-white transition-all duration-300",
+                            "rounded-full bg-white transition-all duration-300 w-[7px] h-[7px]",
                             {
                               "opacity-40": i !== index,
                             }
