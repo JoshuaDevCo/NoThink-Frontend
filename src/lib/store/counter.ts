@@ -13,6 +13,7 @@ export type TCounterStore = {
   multiplier: number;
 
   auto_tapped: number;
+  invites_claimed: number;
 
   is_energy_locked: boolean;
   max_energy: number;
@@ -43,6 +44,7 @@ const getSnapshot = (): Omit<
   | "setTapValue"
   | "refresh"
   | "auto_tapped"
+  | "invites_claimed"
 > => {
   const stringGameSnapshot = localStorage.getItem("snapshot");
   if (!stringGameSnapshot) {
@@ -97,6 +99,7 @@ export const CounterStore = createStore<TCounterStore>((set, get) => {
   return {
     inited: false,
     auto_tapped: 0,
+    invites_claimed: 0,
     ...snapshot,
     click: () => {
       const energy = get().energy;
@@ -134,6 +137,7 @@ export const CounterStore = createStore<TCounterStore>((set, get) => {
             energy_reduce: 1,
             energy_recharge_time: r.data.energy_recharge_time_reduce || 0,
             auto_tapped: r.data.auto_tapped || 0,
+            invites_claimed: r.data.invites_claimed || 0,
           });
         }, 1000);
         setInitalValue({

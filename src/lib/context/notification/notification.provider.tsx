@@ -10,6 +10,43 @@ import { INotificationContext, Notification } from "./notification.types";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { NoThinkBotBoosterIcon } from "../../../assets/boosters/no_think_bot";
+import cn from "classnames";
+import { CoinIcon } from "../../../assets/coin/icon";
+
+const ArrowRight = () => (
+  <svg
+    width="6"
+    height="10"
+    viewBox="0 0 6 10"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M1.25 8.5L4.04289 5.70711C4.43342 5.31658 4.43342 4.68342 4.04289 4.29289L1.25 1.5"
+      stroke="white"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+const ArrowLeft = () => (
+  <svg
+    width="6"
+    height="10"
+    viewBox="0 0 6 10"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M4.75 8.5L1.95711 5.70711C1.56658 5.31658 1.56658 4.68342 1.95711 4.29289L4.75 1.5"
+      stroke="white"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
 
 const NotificationContext = createContext<INotificationContext>({
   toggle: function (): void {
@@ -23,10 +60,14 @@ const NotificationContext = createContext<INotificationContext>({
 
 export const NotificationProvider = ({ children }: PropsWithChildren) => {
   const [opened, setOpened] = useState(false);
+  const [index, setIndex] = useState(0);
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const onClose = () => setOpened(false);
   const toggle = () => setOpened((p) => !p);
+
+  const next = () => setIndex((p) => p + 1);
+  const prev = () => setIndex((p) => p - 1);
 
   const append = useCallback((notification: Notification) => {
     setNotifications((p) => {
@@ -64,11 +105,16 @@ export const NotificationProvider = ({ children }: PropsWithChildren) => {
               }}
               transition={{ duration: 0.3 }}
             >
-              <div className="bg-[#4D1856]/[80%] rounded-[30px] p-[40px_50px] backdrop-blur-[20px] flex flex-nowrap overflow-hidden">
+              <div className="bg-[#4D1856]/[80%] rounded-[30px] p-[40px_50px] backdrop-blur-[20px] flex flex-nowrap overflow-hidden relative">
                 {notifications.map((notification, i) => (
-                  <div key={i} className="flex flex-col gap-[30px] ">
+                  <div
+                    key={i}
+                    className="flex flex-col gap-[20px] flex-1"
+                    style={{ transform: `translateX(${-100 * index}%)` }}
+                  >
                     <div className="flex flex-col gap-[10px] items-center">
                       {notification.type === "bot" && <NoThinkBotBoosterIcon />}
+                      {notification.type === "invited" && <CoinIcon className="w-[60px] h-[60px]" />}
                       <div className="text-[30px] font-extrabold">
                         {notification.label}
                       </div>
@@ -76,14 +122,48 @@ export const NotificationProvider = ({ children }: PropsWithChildren) => {
                         {notification.text}
                       </div>
                     </div>
-                    <button
-                      className="button-bg-gradient p-[20px_60px] rounded-full font-bold"
-                      onClick={onClose}
-                    >
-                      OK, cool!
-                    </button>
+                    {notifications.length - 1 == index && (
+                      <button
+                        className="button-bg-gradient p-[20px_60px] rounded-full font-bold"
+                        onClick={onClose}
+                      >
+                        OK, cool!
+                      </button>
+                    )}
                   </div>
                 ))}
+                {notifications.length > 1 && (
+                  <button
+                    onClick={next}
+                    className="absolute right-[10px] top-[50%] translate-y-[-50%] w-[30px] h-[30px] rounded-full bg-white/20"
+                  >
+                    <ArrowRight />
+                  </button>
+                )}
+                {notifications.length > 1 && index != 0 && (
+                  <button
+                    onClick={prev}
+                    className="absolute left-[10px] top-[50%] translate-y-[-50%] w-[30px] h-[30px] rounded-full bg-white/20"
+                  >
+                    <ArrowLeft />
+                  </button>
+                )}
+                {notifications.length > 0 && (
+                  <div className="mt-[30px] flex items-center justify-center">
+                    <div className="flex gap-[8px]">
+                      {notifications.map((_, i) => (
+                        <span
+                          className={cn(
+                            "rounded-full bg-white transition-all duration-300",
+                            {
+                              "opacity-40": i !== index,
+                            }
+                          )}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </motion.div>
           )}

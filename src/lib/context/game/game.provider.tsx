@@ -22,6 +22,7 @@ export const GameContext = createContext<IGameContext>({
     booster_type: null,
     total_balance: 0,
     auto_tapped: 0,
+    invites_claimed: 0,
     count: 0,
     tap_value: 0,
     clicks: 0,
@@ -169,10 +170,21 @@ export const GameProvider = ({
   }, [challenge.inited]);
 
   useEffect(() => {
+    if (counter.invites_claimed > 0) {
+      notification.append({
+        type: "invited",
+        label:
+          "+ " + new Intl.NumberFormat().format(counter.invites_claimed * 100),
+        text: "Great! Here is your daily reward for all players invited by you!",
+      });
+    }
+  }, [counter.invites_claimed]);
+
+  useEffect(() => {
     if (counter.auto_tapped > 0) {
       notification.append({
         type: "bot",
-        label: "+" + counter.auto_tapped,
+        label: "+ " + new Intl.NumberFormat().format(counter.auto_tapped),
         text: "You got this! Your NO-THINK Bot has just mined coins for you!",
       });
     }

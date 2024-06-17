@@ -9,6 +9,7 @@ import { TablePage } from "../pages/table/page";
 import { EarnPage } from "../pages/earn/page";
 import { IndexPage } from "../pages/index";
 import { NotificationProvider } from "../lib/context/notification/notification.provider";
+import { postEvent } from "@tma.js/sdk";
 
 export const App = ({ connected }: { connected: boolean }) => {
   const tmaNavigator = useMemo(() => initNavigator("app-navigation-state"), []);
@@ -18,6 +19,8 @@ export const App = ({ connected }: { connected: boolean }) => {
   const [location, reactNavigator] = useIntegration(tmaNavigator);
   useEffect(() => {
     tmaNavigator.attach();
+    postEvent("web_app_expand");
+
     return () => tmaNavigator.detach();
   }, [tmaNavigator]);
 
