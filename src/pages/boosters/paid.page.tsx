@@ -87,8 +87,9 @@ const DESCRIPTIONS: Record<string, string> = {
 
 export const BoosterPage = () => {
   const { key } = useParams();
-  const { booster } = useGame();
+  const { booster, counter } = useGame();
   const { list, mine, use } = booster;
+  const { total_balance, count } = counter;
   const [loading, setLoading] = useState(false);
   const mineMaxBoosterLevel = useMemo(
     () =>
@@ -101,6 +102,8 @@ export const BoosterPage = () => {
         : 0,
     [key, mine]
   );
+
+  const balance = useMemo(() => total_balance + count, [total_balance, count]);
   return (
     <div className="absolute z-50 top-0 left-0 h-full w-full bg">
       <div className="px-[20px] pt-[20px] pb-[30px] h-full overflow-auto">
@@ -147,12 +150,12 @@ export const BoosterPage = () => {
                             setLoading(false);
                           });
                         }}
-                        disabled={loading}
+                        disabled={loading || balance < booster.price}
                       >
                         <span>Pay</span>
                         {booster.denom === "nothink" && <CoinIcon />}
                         {booster.denom === "ton" && <TonCoinIcon />}
-                        {booster.price || 0}
+                        {new Intl.NumberFormat().format(booster.price || 0)}
                       </button>
                     )}
                   </div>
