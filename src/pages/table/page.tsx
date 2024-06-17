@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useMemo, useState } from "react";
 import { CoinIcon } from "../../assets/coin/icon";
 import cn from "classnames";
 import { useLaunchParams } from "@tma.js/sdk-react";
@@ -10,7 +10,7 @@ export const TablePage = () => {
   const { initData } = useLaunchParams();
   const { counter, stat } = useGame();
   const { count, total_balance } = counter;
-  const { list, invited_list, place } = stat;
+  const { list, invited_list, place: _place } = stat;
   const [activeTab, setActiveTab] = useState<"all" | "friends">("all");
   const [inviteId, setInviteId] = useState<string | null>(null);
 
@@ -26,6 +26,22 @@ export const TablePage = () => {
       setInviteId(r.data._id);
     });
   }, []);
+
+  const table = useMemo(() => {
+    return activeTab === "all" ? list : invited_list;
+  }, [activeTab, list, invited_list]);
+
+  const place = useMemo(
+    () =>
+      activeTab === "all"
+        ? _place
+        : invited_list.findIndex(
+            (item) =>
+              (item.telegram_details as unknown as { id?: number }).id ===
+              initData?.user?.id
+          ),
+    [activeTab, _place, invited_list]
+  );
 
   return (
     <div className="absolute z-50 top-0 left-0 h-full w-full bg">
@@ -122,7 +138,7 @@ export const TablePage = () => {
           </div>
         )}
         <section className="flex flex-col gap-[3px]">
-          {(activeTab === "all" ? list : invited_list).map((item, i) => (
+          {table.map((item, i) => (
             <div
               key={item._id}
               className={cn(

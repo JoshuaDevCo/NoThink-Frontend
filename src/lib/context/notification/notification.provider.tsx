@@ -105,7 +105,7 @@ export const NotificationProvider = ({ children }: PropsWithChildren) => {
               }}
               transition={{ duration: 0.3 }}
             >
-              <div className="bg-[#4D1856]/[80%] rounded-[30px] p-[40px_50px] backdrop-blur-[20px] flex flex-nowrap overflow-hidden relative">
+              <div className="bg-[#4D1856]/[80%] rounded-[30px] p-[40px_50px] backdrop-blur-[20px] flex overflow-hidden relative">
                 {notifications
                   .filter((_, i) => i === index)
                   .map((notification, i) => (
@@ -154,7 +154,7 @@ export const NotificationProvider = ({ children }: PropsWithChildren) => {
                     <ArrowLeft />
                   </button>
                 )}
-                {notifications.length > 0 && (
+                {notifications.length > 1 && (
                   <div className="mt-[30px] flex items-center justify-center">
                     <div className="flex gap-[8px]">
                       {notifications.map((_, i) => (
