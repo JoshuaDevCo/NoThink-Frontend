@@ -27,9 +27,9 @@ export const App = ({ connected }: { connected: boolean }) => {
   return (
     <>
       <main className="h-full overflow-hidden">
-        <NotificationProvider>
-          <GameProvider connected={connected}>
-            <Router location={location} navigator={reactNavigator}>
+        <Router location={location} navigator={reactNavigator}>
+          <NotificationProvider>
+            <GameProvider connected={connected}>
               <Routes>
                 <Route path="/" Component={IndexPage}>
                   <Route path="/boosters" Component={BoostersPage}>
@@ -40,9 +40,9 @@ export const App = ({ connected }: { connected: boolean }) => {
                 </Route>
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>
-            </Router>
-          </GameProvider>
-        </NotificationProvider>
+            </GameProvider>
+          </NotificationProvider>
+        </Router>
       </main>
     </>
   );

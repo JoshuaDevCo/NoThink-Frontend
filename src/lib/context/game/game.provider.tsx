@@ -13,6 +13,7 @@ import { useGameTick } from "../../hooks/useGameTick";
 import { BoosterType } from "../../types/booster";
 import { ChallengeStore } from "../../store/challenge";
 import { useNotification } from "../notification/notification.provider";
+import { CHALLENGES_LABELS } from "./game.challenges";
 
 export const GameContext = createContext<IGameContext>({
   counter: {
@@ -157,13 +158,17 @@ export const GameProvider = ({
 
   useEffect(() => {
     if (challenge.inited) {
+      console.log(challenge.completed);
       challenge.completed
         .filter((challenge) => !challenge.claimed)
+        .filter((challenge) =>
+          Object.keys(CHALLENGES_LABELS).includes(challenge.type)
+        )
         .forEach((challenge) => {
           notification.append({
             type: "challange",
-            label: challenge.type,
-            text: "text",
+            label: "Challenge completed",
+            text: CHALLENGES_LABELS[challenge.type],
           });
         });
     }
@@ -174,7 +179,7 @@ export const GameProvider = ({
       notification.append({
         type: "invited",
         label:
-          "+ " + new Intl.NumberFormat().format(counter.invites_claimed * 100),
+          "+ " + new Intl.NumberFormat().format(counter.invites_claimed * 1000),
         text: "Great! Here is your daily reward for all players invited by you!",
       });
     }

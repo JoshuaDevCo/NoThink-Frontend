@@ -185,7 +185,6 @@ export const CounterStore = createStore<TCounterStore>((set, get) => {
           multiplier: r.data.multiplier,
           energy: r.data.energy,
           max_energy: r.data.max_energy,
-          tap_value: r.data.tap_value || 1,
           energy_reduce: 1,
           energy_recharge_time: r.data.energy_recharge_time_reduce || 0,
         });
@@ -194,7 +193,6 @@ export const CounterStore = createStore<TCounterStore>((set, get) => {
           total_balance: r.data.score,
           energy: r.data.energy,
           max_energy: r.data.max_energy,
-          tap_value: r.data.tap_value || 1,
           energy_reduce: 1,
           energy_recharge_time: r.data.energy_recharge_time_reduce || 0,
         });

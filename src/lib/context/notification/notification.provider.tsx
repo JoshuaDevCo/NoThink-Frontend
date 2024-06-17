@@ -12,6 +12,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { NoThinkBotBoosterIcon } from "../../../assets/boosters/no_think_bot";
 import cn from "classnames";
 import { CoinIcon } from "../../../assets/coin/icon";
+import { useNavigate } from "react-router-dom";
 
 const ArrowRight = () => (
   <svg
@@ -59,11 +60,20 @@ const NotificationContext = createContext<INotificationContext>({
 });
 
 export const NotificationProvider = ({ children }: PropsWithChildren) => {
+  const navigate = useNavigate();
   const [opened, setOpened] = useState(false);
   const [index, setIndex] = useState(0);
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const onClose = () => setOpened(false);
+  const onClose = (redirect?: boolean) => () => {
+    setOpened(false);
+    setIndex(0);
+    if (redirect) {
+      setTimeout(() => {
+        navigate("/earn");
+      }, 200);
+    }
+  };
   const toggle = () => setOpened((p) => !p);
 
   const next = () => setIndex((p) => p + 1);
@@ -105,15 +115,11 @@ export const NotificationProvider = ({ children }: PropsWithChildren) => {
               }}
               transition={{ duration: 0.3 }}
             >
-              <div className="bg-[#4D1856]/[80%] rounded-[30px] p-[40px_50px] backdrop-blur-[20px] flex overflow-hidden relative">
+              <div className="bg-[#4D1856]/[80%] rounded-[30px] p-[40px_50px] backdrop-blur-[20px] flex flex-col overflow-hidden relative">
                 {notifications
                   .filter((_, i) => i === index)
                   .map((notification, i) => (
-                    <div
-                      key={i}
-                      className="flex flex-col gap-[20px] w-full"
-                      style={{ transform: `translateX(${-100 * index}%)` }}
-                    >
+                    <div key={i} className="flex flex-col gap-[20px] w-full">
                       <div className="flex flex-col gap-[10px] items-center">
                         {notification.type === "bot" && (
                           <NoThinkBotBoosterIcon />
@@ -121,7 +127,12 @@ export const NotificationProvider = ({ children }: PropsWithChildren) => {
                         {notification.type === "invited" && (
                           <CoinIcon className="w-[60px] h-[60px]" />
                         )}
-                        <div className="text-[30px] font-extrabold">
+                        <div
+                          className={cn("font-extrabold", {
+                            "text-[22px]": notification.type === "challange",
+                            "text-[30px]": notification.type !== "challange",
+                          })}
+                        >
                           {notification.label}
                         </div>
                         <div className="text-[13px] text-[#D9A6E1] text-center">
@@ -131,21 +142,22 @@ export const NotificationProvider = ({ children }: PropsWithChildren) => {
                       {notifications.length - 1 == index && (
                         <button
                           className="button-bg-gradient p-[20px_60px] rounded-full font-bold"
-                          onClick={onClose}
+                          onClick={onClose(notification.type === "challange")}
                         >
                           OK, cool!
                         </button>
                       )}
                     </div>
                   ))}
-                {notifications.length > 1 && (
-                  <button
-                    onClick={next}
-                    className="absolute right-[10px] top-[50%] translate-y-[-50%] w-[30px] h-[30px] rounded-full bg-white/20 flex items-center justify-center"
-                  >
-                    <ArrowRight />
-                  </button>
-                )}
+                {notifications.length > 1 &&
+                  notifications.length - 1 !== index && (
+                    <button
+                      onClick={next}
+                      className="absolute right-[10px] top-[50%] translate-y-[-50%] w-[30px] h-[30px] rounded-full bg-white/20 flex items-center justify-center"
+                    >
+                      <ArrowRight />
+                    </button>
+                  )}
                 {notifications.length > 1 && index != 0 && (
                   <button
                     onClick={prev}

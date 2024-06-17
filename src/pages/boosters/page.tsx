@@ -9,16 +9,23 @@ import { CoinIcon } from "../../assets/coin/icon";
 import { BoosterItem } from "../../components/booster/booster";
 import { useGame } from "../../lib/hooks/useGame";
 import { Booster } from "../../lib/store/booster";
+import { TonCoinIcon } from "../../assets/coin/ton-coin";
 
 const getNextBoosterPrice = (currentBought: number, boosters: Booster[]) => {
-  const price = boosters.find(
+  const currentBooster = boosters[currentBought];
+  const booster = boosters.find(
     (booster) => booster.level === currentBought + 1
-  )?.price;
-  if (!price && currentBought == boosters.length) return "max";
+  );
+  const price = booster?.price;
+  if (!price && currentBought == boosters.length)
+    return { amount: "Max", denom: currentBooster?.denom };
   if (!price) {
-    return "free";
+    return { amount: "Free", denom: currentBooster?.denom };
   }
-  return new Intl.NumberFormat().format(price);
+  return {
+    amount: new Intl.NumberFormat().format(price),
+    denom: booster.denom,
+  };
 };
 
 export const BoostersPage = () => {
@@ -88,11 +95,24 @@ export const BoostersPage = () => {
                 // to="/boosters/zen-power"
                 description={
                   <span className="flex items-center gap-[5px] [&>svg]:w-[12px] [&>svg]:h-[12px]">
-                    <CoinIcon />{" "}
                     {getNextBoosterPrice(
                       mine["multitap"]?.length || 0,
                       list["multitap"] || []
-                    )}
+                    ).denom === "ton" ? (
+                      <TonCoinIcon />
+                    ) : (
+                      <CoinIcon />
+                    )}{" "}
+                    {
+                      getNextBoosterPrice(
+                        mine["multitap"]?.length || 0,
+                        list["multitap"] || []
+                      ).amount
+                    }
+                    {getNextBoosterPrice(
+                      mine["multitap"]?.length || 0,
+                      list["multitap"] || []
+                    ).denom === "ton" && " TON"}
                   </span>
                 }
                 to="/boosters/multitap"
@@ -104,11 +124,24 @@ export const BoostersPage = () => {
                 }`}
                 description={
                   <span className="flex items-center gap-[5px] [&>svg]:w-[12px] [&>svg]:h-[12px]">
-                    <CoinIcon />{" "}
                     {getNextBoosterPrice(
                       mine["energy-limit-increase"]?.length || 0,
                       list["energy-limit-increase"] || []
-                    )}
+                    ).denom === "ton" ? (
+                      <TonCoinIcon />
+                    ) : (
+                      <CoinIcon />
+                    )}{" "}
+                    {
+                      getNextBoosterPrice(
+                        mine["energy-limit-increase"]?.length || 0,
+                        list["energy-limit-increase"] || []
+                      ).amount
+                    }
+                    {getNextBoosterPrice(
+                      mine["energy-limit-increase"]?.length || 0,
+                      list["energy-limit-increase"] || []
+                    ).denom === "ton" && " TON"}
                   </span>
                 }
                 icon={EnergyLimitBoosterIcon}
@@ -121,11 +154,24 @@ export const BoostersPage = () => {
                 }`}
                 description={
                   <span className="flex items-center gap-[5px] [&>svg]:w-[12px] [&>svg]:h-[12px]">
-                    <CoinIcon />{" "}
                     {getNextBoosterPrice(
                       mine["energy-recharge-decrease"]?.length || 0,
                       list["energy-recharge-decrease"] || []
-                    )}
+                    ).denom === "ton" ? (
+                      <TonCoinIcon />
+                    ) : (
+                      <CoinIcon />
+                    )}{" "}
+                    {
+                      getNextBoosterPrice(
+                        mine["energy-recharge-decrease"]?.length || 0,
+                        list["energy-recharge-decrease"] || []
+                      ).amount
+                    }
+                    {getNextBoosterPrice(
+                      mine["energy-recharge-decrease"]?.length || 0,
+                      list["energy-recharge-decrease"] || []
+                    ).denom === "ton" && " TON"}
                   </span>
                 }
                 icon={SpeedRechardeBoosterIcon}
@@ -135,11 +181,24 @@ export const BoostersPage = () => {
                 title="NO-THINK Bot"
                 description={
                   <span className="flex items-center gap-[5px] [&>svg]:w-[12px] [&>svg]:h-[12px]">
-                    <CoinIcon />{" "}
                     {getNextBoosterPrice(
                       mine["autotapper"]?.length || 0,
                       list["autotapper"] || []
-                    )}
+                    ).denom === "ton" ? (
+                      <TonCoinIcon />
+                    ) : (
+                      <CoinIcon />
+                    )}{" "}
+                    {
+                      getNextBoosterPrice(
+                        mine["autotapper"]?.length || 0,
+                        list["autotapper"] || []
+                      ).amount
+                    }
+                    {getNextBoosterPrice(
+                      mine["autotapper"]?.length || 0,
+                      list["autotapper"] || []
+                    ).denom === "ton" && " TON"}
                   </span>
                 }
                 icon={NoThinkBotBoosterIcon}

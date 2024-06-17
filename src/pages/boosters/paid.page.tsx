@@ -135,7 +135,7 @@ export const BoosterPage = () => {
                     <div className="flex-1">{key && ICONS[key]}</div>
                     <div className="flex flex-col gap-[5px]">
                       <div>Level {booster.level}</div>
-                      <div>{booster.description}</div>
+                      <div className="text-[14px]">{booster.description}</div>
                     </div>
                   </div>
                   <div>
@@ -143,7 +143,7 @@ export const BoosterPage = () => {
                       <BoughtIcon />
                     ) : (
                       <button
-                        className="p-[8px_10px] flex gap-[10px] items-center rounded-[10px] button-bg-gradient [&>svg]:w-[16px] [&>svg]:h-[16px] disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="p-[8px_10px] flex gap-[5px] items-center rounded-[10px] button-bg-gradient [&>svg]:w-[16px] [&>svg]:h-[16px] disabled:opacity-40 disabled:cursor-not-allowed"
                         onClick={() => {
                           setLoading(true);
                           use(key as BoosterType).then(() => {
@@ -155,7 +155,10 @@ export const BoosterPage = () => {
                         <span>Pay</span>
                         {booster.denom === "nothink" && <CoinIcon />}
                         {booster.denom === "ton" && <TonCoinIcon />}
+                        <span>
                         {new Intl.NumberFormat().format(booster.price || 0)}
+                        {booster.denom === "ton" && " TON"}
+                        </span>
                       </button>
                     )}
                   </div>

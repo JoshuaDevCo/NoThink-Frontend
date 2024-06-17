@@ -191,7 +191,7 @@ export const IndexPage = () => {
               duration: 1,
               delay: 0.3,
             }}
-            className="fixed z-[100] bg-white/10 inset-0 backdrop-blur-[15px] flex items-center justify-center"
+            className="fixed z-[100] bg-white/10 inset-0 backdrop-blur-[15px] flex flex-col items-center justify-center"
           >
             <motion.img
               key="inital"
@@ -212,6 +212,46 @@ export const IndexPage = () => {
               src="/thumbnail.svg"
               alt=""
             />
+            <div className="text-[30px] font-black">
+              loading
+              <AnimatePresence key="dots">
+                <motion.span
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: 0 }}
+                  transition={{
+                    duration: 1,
+                    repeat: Infinity,
+                    repeatType: "mirror",
+                  }}
+                >
+                  .
+                </motion.span>
+                <motion.span
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: 0 }}
+                  transition={{
+                    delay: 0.3,
+                    duration: 1,
+                    repeat: Infinity,
+                    repeatType: "mirror",
+                  }}
+                >
+                  .
+                </motion.span>
+                <motion.span
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: 0 }}
+                  transition={{
+                    delay: 0.6,
+                    duration: 1,
+                    repeat: Infinity,
+                    repeatType: "mirror",
+                  }}
+                >
+                  .
+                </motion.span>
+              </AnimatePresence>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

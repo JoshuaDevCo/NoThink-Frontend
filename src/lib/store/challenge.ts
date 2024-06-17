@@ -21,15 +21,19 @@ export const ChallengeStore = createStore<IChallengeStore>((set) => ({
     });
   },
   init: () => {
-    challengeApi.getAll().then((r) => {
-      set({ list: r.data });
+    Promise.all([
+      challengeApi.getAll().then((r) => {
+        set({ list: r.data });
+      }),
+      challengeApi
+        .getCompleted()
+        .then((r) => {
+          set({ completed: r.data });
+        })
+        .catch((e) => console.error(e)),
+    ]).then(() => {
+      set({ inited: true });
     });
-    challengeApi
-      .getCompleted()
-      .then((r) => {
-        set({ completed: r.data });
-      })
-      .catch((e) => console.error(e));
   },
   claim: async (challengeId: string) => {
     await challengeApi.claim(challengeId);
