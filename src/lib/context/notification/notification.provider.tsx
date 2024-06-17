@@ -109,7 +109,7 @@ export const NotificationProvider = ({ children }: PropsWithChildren) => {
                 {notifications.map((notification, i) => (
                   <div
                     key={i}
-                    className="flex flex-col gap-[20px] flex-1"
+                    className="flex flex-col gap-[20px] w-full"
                     style={{ transform: `translateX(${-100 * index}%)` }}
                   >
                     <div className="flex flex-col gap-[10px] items-center">
@@ -135,7 +135,7 @@ export const NotificationProvider = ({ children }: PropsWithChildren) => {
                 {notifications.length > 1 && (
                   <button
                     onClick={next}
-                    className="absolute right-[10px] top-[50%] translate-y-[-50%] w-[30px] h-[30px] rounded-full bg-white/20"
+                    className="absolute right-[10px] top-[50%] translate-y-[-50%] w-[30px] h-[30px] rounded-full bg-white/20 flex items-center justify-center"
                   >
                     <ArrowRight />
                   </button>
@@ -143,7 +143,7 @@ export const NotificationProvider = ({ children }: PropsWithChildren) => {
                 {notifications.length > 1 && index != 0 && (
                   <button
                     onClick={prev}
-                    className="absolute left-[10px] top-[50%] translate-y-[-50%] w-[30px] h-[30px] rounded-full bg-white/20"
+                    className="absolute left-[10px] top-[50%] translate-y-[-50%] w-[30px] h-[30px] rounded-full bg-white/20 flex items-center justify-center"
                   >
                     <ArrowLeft />
                   </button>
