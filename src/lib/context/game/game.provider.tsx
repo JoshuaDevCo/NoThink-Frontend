@@ -14,6 +14,8 @@ import { BoosterType } from "../../types/booster";
 import { ChallengeStore } from "../../store/challenge";
 import { useNotification } from "../notification/notification.provider";
 import { CHALLENGES_LABELS } from "./game.challenges";
+import { useLocation } from "react-router-dom";
+import { postEvent } from "@tma.js/sdk-react";
 
 export const GameContext = createContext<IGameContext>({
   counter: {
@@ -113,6 +115,7 @@ export const GameProvider = ({
   const challenge = useStore(ChallengeStore);
 
   const notification = useNotification();
+  const location = useLocation();
 
   const useBooster = useCallback(
     async (type: BoosterType) => {
@@ -200,15 +203,12 @@ export const GameProvider = ({
     }
   }, [counter.auto_tapped]);
 
-  // useEffect(() => {
-  //   if (!stat.inited) return;
-  //   const handler = setInterval(() => {
-  //     stat.refreshNumbers();
-  //   }, 3000);
-  //   return () => {
-  //     clearInterval(handler);
-  //   };
-  // }, [stat.inited]);
+  useEffect(() => {
+    postEvent("web_app_trigger_haptic_feedback", {
+      type: "impact",
+      impact_style: "rigid",
+    });
+  }, [location.pathname]);
 
   useEffect(() => {
     if (!connected) return;

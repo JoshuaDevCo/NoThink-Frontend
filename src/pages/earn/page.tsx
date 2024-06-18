@@ -72,8 +72,8 @@ export const EarnPage = () => {
         <div className="card-bg-gradient p-[40px_50px] rounded-[30px] flex flex-col items-center gap-[10px] text-center">
           <div className="text-[30px] font-bold">Invite and Earn</div>
           <div className="text-[13px]">
-            Users earn 100 coins for both the referrer and the referee upon
-            successful referral.
+            Users earn {new Intl.NumberFormat().format(1000)} coins for both the
+            referrer and the referee upon successful referral.
           </div>
 
           <a
