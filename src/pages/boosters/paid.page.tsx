@@ -4,11 +4,11 @@ import { ReactNode, useMemo, useState } from "react";
 import { EnergyLimitBoosterIcon } from "../../assets/boosters/energy_limit";
 import { SpeedRechardeBoosterIcon } from "../../assets/boosters/speed_recharge";
 import { NoThinkBotBoosterIcon } from "../../assets/boosters/no_think_bot";
-import { CoinIcon } from "../../assets/coin/icon";
+import { CoinIconSmall as CoinIcon } from "../../assets/coin/coin-small";
+import { TonCoinSmall as TonCoinIcon } from "../../assets/coin/ton-small";
 import cn from "classnames";
 import { BoosterType } from "../../lib/types/booster";
 import { useGame } from "../../lib/hooks/useGame";
-import { TonCoinIcon } from "../../assets/coin/ton-coin";
 
 const BoughtIcon = () => (
   <svg
@@ -156,8 +156,8 @@ export const BoosterPage = () => {
                         {booster.denom === "nothink" && <CoinIcon />}
                         {booster.denom === "ton" && <TonCoinIcon />}
                         <span>
-                        {new Intl.NumberFormat().format(booster.price || 0)}
-                        {booster.denom === "ton" && " TON"}
+                          {new Intl.NumberFormat().format(booster.price || 0)}
+                          {booster.denom === "ton" && " TON"}
                         </span>
                       </button>
                     )}

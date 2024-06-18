@@ -5,11 +5,11 @@ import { MutlitapBoosterIcon } from "../../assets/boosters/multitap";
 import { NoThinkBotBoosterIcon } from "../../assets/boosters/no_think_bot";
 import { SpeedRechardeBoosterIcon } from "../../assets/boosters/speed_recharge";
 import { ZenPowerBoosterIcon } from "../../assets/boosters/zen_power";
-import { CoinIcon } from "../../assets/coin/icon";
+import { CoinIconSmall as CoinIcon } from "../../assets/coin/coin-small";
+import { TonCoinSmall as TonCoinIcon } from "../../assets/coin/ton-small";
 import { BoosterItem } from "../../components/booster/booster";
 import { useGame } from "../../lib/hooks/useGame";
 import { Booster } from "../../lib/store/booster";
-import { TonCoinIcon } from "../../assets/coin/ton-coin";
 
 const getNextBoosterPrice = (currentBought: number, boosters: Booster[]) => {
   const currentBooster = boosters[currentBought];
