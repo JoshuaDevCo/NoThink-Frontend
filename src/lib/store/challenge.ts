@@ -3,6 +3,7 @@ import { challengeApi } from "../apis/challenge";
 
 export interface IChallengeStore {
   inited: boolean;
+  loading: null | string;
   list: { type: string; reward: string; label: string }[];
   completed: { _id: string; type: string; claimed: boolean }[];
 
@@ -12,6 +13,7 @@ export interface IChallengeStore {
 }
 
 export const ChallengeStore = createStore<IChallengeStore>((set) => ({
+  loading: null,
   inited: false,
   completed: [],
   list: [],
@@ -36,9 +38,11 @@ export const ChallengeStore = createStore<IChallengeStore>((set) => ({
     });
   },
   claim: async (challengeId: string) => {
+    set({ loading: challengeId });
     await challengeApi.claim(challengeId);
     await challengeApi.getCompleted().then((r) => {
       set({ completed: r.data });
+      set({ loading: null });
     });
   },
 }));

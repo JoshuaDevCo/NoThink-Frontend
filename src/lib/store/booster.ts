@@ -25,6 +25,7 @@ export type IBoosterStore = {
     startedAt: number;
     isActive: boolean;
   };
+  setLoading: (value: boolean) => void;
   stop: () => void;
 };
 
@@ -58,7 +59,6 @@ export const BoosterStore = createStore<IBoosterStore>((set) => ({
   use: (type) => {
     set({ loading: true });
     return boosterApi.use(type).then((r) => {
-      set({ loading: false });
       // const used = r.data;
       if (type === "zen-power" && r.data) {
         set({
@@ -70,6 +70,9 @@ export const BoosterStore = createStore<IBoosterStore>((set) => ({
       }
       return r.data;
     });
+  },
+  setLoading: (value: boolean) => {
+    set({ loading: value });
   },
   stop: () => {
     set({ zenPower: undefined });

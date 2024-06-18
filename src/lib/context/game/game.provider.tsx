@@ -81,8 +81,12 @@ export const GameContext = createContext<IGameContext>({
     stop: function (): void {
       throw new Error("Function not implemented.");
     },
+    setLoading: function (): void {
+      throw new Error("Function not implemented.");
+    },
   },
   challenge: {
+    loading: null,
     list: [],
     completed: [],
     init: function (): void {
@@ -123,6 +127,7 @@ export const GameProvider = ({
         } else {
           await counter.refresh();
         }
+        booster.setLoading(false);
         return used;
       });
     },

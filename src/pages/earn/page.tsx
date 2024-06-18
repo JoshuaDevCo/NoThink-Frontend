@@ -138,13 +138,9 @@ export const EarnPage = () => {
                 className={cn(
                   "flex justify-between items-center h-[70px] bg-white/15 px-[15px] rounded-[15px]",
                   {
-                    "opacity-40": challengeStore.completed.find(
+                    "opacity-40": !challengeStore.completed.find(
                       (el) => el.type === challange.type
-                    )
-                      ? challengeStore.completed.find(
-                          (el) => el.type === challange.type
-                        )?.claimed
-                      : true,
+                    ),
                     "cursor-not-allowed": !challengeStore.completed.find(
                       (el) => el.type === challange.type
                     ),
