@@ -15,6 +15,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { BackgroundVideo } from "../../components/background-video/background-video";
 import { useGameTick } from "../../lib/hooks/useGameTick";
 import { ZenPowerBoosterIcon } from "../../assets/boosters/zen_power";
+import { postEvent } from "@tma.js/sdk-react";
 
 const DEBUG = false;
 
@@ -139,6 +140,10 @@ export const IndexPage = () => {
                     })
                   );
                 handleClick();
+                postEvent("web_app_trigger_haptic_feedback", {
+                  type: "impact",
+                  impact_style: "light",
+                });
               }}
               onTouchStart={() => {}}
               onTouchEnd={() => {}}
