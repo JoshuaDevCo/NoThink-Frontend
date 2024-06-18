@@ -39,7 +39,7 @@ export const TablePage = () => {
             (item) =>
               (item.telegram_details as unknown as { id?: number }).id ===
               initData?.user?.id
-          ),
+          ) + 1,
     [activeTab, _place, invited_list]
   );
 
