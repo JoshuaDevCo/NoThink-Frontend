@@ -9,6 +9,15 @@ import { TonCoinSmall as TonCoinIcon } from "../../assets/coin/ton-small";
 import cn from "classnames";
 import { BoosterType } from "../../lib/types/booster";
 import { useGame } from "../../lib/hooks/useGame";
+import { Booster } from "../../lib/store/booster";
+import { useLaunchParams } from "@tma.js/sdk-react";
+import TonWeb from "tonweb";
+import * as buffer from "buffer";
+import { useTonConnectUI } from "@tonconnect/ui-react";
+// import { beginCell } from "@ton/core";
+// import { TonConnect } from "@tonconnect/ui-react";
+
+window.Buffer = buffer.Buffer;
 
 const BoughtIcon = () => (
   <svg
@@ -91,6 +100,9 @@ export const BoosterPage = () => {
   const { list, mine, use } = booster;
   const { total_balance, count } = counter;
   const [loading, setLoading] = useState(false);
+  const params = useLaunchParams();
+  const [tonConnectUI] = useTonConnectUI();
+  // const wallet = useTonWallet();
   const mineMaxBoosterLevel = useMemo(
     () =>
       key
@@ -102,6 +114,31 @@ export const BoosterPage = () => {
         : 0,
     [key, mine]
   );
+
+  const sendTransaction = async (user: number, booster: Booster) => {
+    // console.log(user, booster);
+
+    // console.log(Buffer.from("123"));
+    // const body = beginCell();
+    //   .storeStringTail("123132132132132121212121212121123") // write our text comment
+    //   .endCell();
+    let userInfo = new TonWeb.boc.Cell();
+    // userInfo.bits.writeString(String(user));
+    const transaction = {
+      validUntil: Math.round(Date.now() / 1000) + 600,
+      messages: [
+        {
+          address: "UQAyz0PWZt2Zb5qmOunVzaKBYhGBa366QBgZdBLZNK7UDvBz", // destination address
+          amount: String(booster.price * 1000000000), //Toncoin in nanotons
+          // amount: "100",
+          // payload: body.toBoc().toString("base64"),
+          payload: "hello",
+        },
+      ],
+    };
+    // console.log(transaction);
+    return await tonConnectUI.sendTransaction(transaction);
+  };
 
   const balance = useMemo(() => total_balance + count, [total_balance, count]);
   return (
@@ -144,11 +181,34 @@ export const BoosterPage = () => {
                     ) : (
                       <button
                         className="p-[8px_10px] flex gap-[5px] items-center rounded-[10px] button-bg-gradient [&>svg]:w-[16px] [&>svg]:h-[16px] disabled:opacity-40 disabled:cursor-not-allowed"
-                        onClick={() => {
+                        onClick={async () => {
                           setLoading(true);
-                          use(key as BoosterType).then(() => {
-                            setLoading(false);
-                          });
+                          if (booster.denom == "ton") {
+                            // tonConnectUI.disconnect();
+                            // tonConnectUI.openModal();
+                            await sendTransaction(
+                              Number(params.initData?.user?.id),
+                              booster
+                            )
+                              .then(() => {
+                                use(key as BoosterType)
+                                  .then(() => {
+                                    setLoading(false);
+                                  })
+                                  .catch(() => {
+                                    setLoading(false);
+                                  });
+                              })
+                              .catch(() => setLoading(false));
+                          } else {
+                            use(key as BoosterType)
+                              .then(() => {
+                                setLoading(false);
+                              })
+                              .catch(() => {
+                                setLoading(false);
+                              });
+                          }
                         }}
                         disabled={loading || balance < booster.price}
                       >

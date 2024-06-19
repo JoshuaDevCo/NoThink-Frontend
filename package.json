@@ -12,6 +12,9 @@
   "dependencies": {
     "@tma.js/react-router-integration": "^3.0.0",
     "@tma.js/sdk-react": "^2.2.0",
+    "@ton/core": "^0.56.3",
+    "@ton/ton": "^13.11.2",
+    "@tonconnect/ui-react": "^2.0.5",
     "axios": "^1.7.2",
     "classnames": "^2.5.1",
     "copy-to-clipboard": "^3.3.3",
@@ -21,6 +24,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1",
+    "tonweb": "^0.0.66",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
