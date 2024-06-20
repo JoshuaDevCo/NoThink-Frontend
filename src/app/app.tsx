@@ -29,7 +29,7 @@ export const App = ({ connected }: { connected: boolean }) => {
     <>
       <main className="h-full overflow-hidden">
         <TonConnectUIProvider
-          manifestUrl="https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json"
+          manifestUrl="https://gist.githubusercontent.com/breavedev/40545ae9e458253e4e6017bc1dc5a69a/raw/efe3604d6214c80452d1f4ae35b5a39b4766f108/tonconnect-manifest.json"
           uiPreferences={{ theme: THEME.DARK }}
           walletsListConfiguration={{
             includeWallets: [
