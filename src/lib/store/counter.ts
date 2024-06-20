@@ -27,7 +27,7 @@ export type TCounterStore = {
   init: () => void;
   refresh: () => void;
   sync: () => Promise<void>;
-  startEnergyRecharge: () => number;
+  startEnergyRecharge: () => NodeJS.Timeout;
   setTapValue: (value: number) => void;
 };
 
