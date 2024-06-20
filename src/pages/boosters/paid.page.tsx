@@ -9,6 +9,10 @@ import { TonCoinSmall as TonCoinIcon } from "../../assets/coin/ton-small";
 import cn from "classnames";
 import { BoosterType } from "../../lib/types/booster";
 import { useGame } from "../../lib/hooks/useGame";
+import { Booster } from "../../lib/store/booster";
+import { useLaunchParams } from "@tma.js/sdk-react";
+import { beginCell } from "@ton/core";
+import { useTonConnectUI } from "@tonconnect/ui-react";
 
 const BoughtIcon = () => (
   <svg
@@ -91,6 +95,9 @@ export const BoosterPage = () => {
   const { list, mine, use } = booster;
   const { total_balance, count } = counter;
   const [loading, setLoading] = useState(false);
+  const params = useLaunchParams();
+  const [tonConnectUI] = useTonConnectUI();
+  // const wallet = useTonWallet();
   const mineMaxBoosterLevel = useMemo(
     () =>
       key
@@ -102,6 +109,28 @@ export const BoosterPage = () => {
         : 0,
     [key, mine]
   );
+
+  const sendTransaction = async (user: number, booster: Booster) => {
+    // console.log(user, booster);
+
+    let body = beginCell()
+      .storeInt(0, 32)
+      .storeStringTail(String(user)) // write our text comment
+      .endCell();
+    const transaction = {
+      validUntil: Math.round(Date.now() / 1000) + 600,
+      messages: [
+        {
+          address: "UQAyz0PWZt2Zb5qmOunVzaKBYhGBa366QBgZdBLZNK7UDvBz",
+          amount: String(booster.price * 1000000000),
+          payload: body.toBoc().toString("base64"),
+          // payload: "te6cckEBAQEADAAAFAAAAABIZWxsbyGVgYQo",
+        },
+      ],
+    };
+    // console.log(transaction);
+    return await tonConnectUI.sendTransaction(transaction);
+  };
 
   const balance = useMemo(() => total_balance + count, [total_balance, count]);
   return (
@@ -144,21 +173,59 @@ export const BoosterPage = () => {
                     ) : (
                       <button
                         className="p-[8px_10px] flex gap-[5px] items-center rounded-[10px] button-bg-gradient [&>svg]:w-[16px] [&>svg]:h-[16px] disabled:opacity-40 disabled:cursor-not-allowed"
-                        onClick={() => {
+                        onClick={async () => {
                           setLoading(true);
-                          use(key as BoosterType).then(() => {
-                            setLoading(false);
-                          });
+                          if (booster.denom == "ton") {
+                            // tonConnectUI.disconnect();
+                            if (!tonConnectUI.connected)
+                              tonConnectUI.openModal();
+                            await sendTransaction(
+                              Number(params.initData?.user?.id),
+                              booster
+                            )
+                              .then(() => {
+                                setTimeout(() => {
+                                  use(key as BoosterType)
+                                    .then(() => {
+                                      setLoading(false);
+                                    })
+                                    .catch(() => {
+                                      setLoading(false);
+                                    });
+                                }, 20000);
+                              })
+                              .catch(() => {
+                                console.log("sendTransaction.failed");
+                                setLoading(false);
+                              });
+                          } else {
+                            use(key as BoosterType)
+                              .then(() => {
+                                setLoading(false);
+                              })
+                              .catch(() => {
+                                setLoading(false);
+                              });
+                          }
                         }}
                         disabled={loading || balance < booster.price}
                       >
-                        <span>Pay</span>
-                        {booster.denom === "nothink" && <CoinIcon />}
-                        {booster.denom === "ton" && <TonCoinIcon />}
-                        <span>
-                          {new Intl.NumberFormat().format(booster.price || 0)}
-                          {booster.denom === "ton" && " TON"}
-                        </span>
+                        {tonConnectUI.connected ||
+                        mineMaxBoosterLevel + 1 < booster.level ? (
+                          <>
+                            <span>Pay</span>
+                            {booster.denom === "nothink" && <CoinIcon />}
+                            {booster.denom === "ton" && <TonCoinIcon />}
+                            <span>
+                              {new Intl.NumberFormat().format(
+                                booster.price || 0
+                              )}
+                              {booster.denom === "ton" && " TON"}
+                            </span>
+                          </>
+                        ) : (
+                          <span>Connect Wallet</span>
+                        )}
                       </button>
                     )}
                   </div>
