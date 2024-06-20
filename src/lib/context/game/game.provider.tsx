@@ -45,7 +45,7 @@ export const GameContext = createContext<IGameContext>({
     sync: async function () {
       throw new Error("Function not implemented.");
     },
-    startEnergyRecharge: function (): number {
+    startEnergyRecharge: function () {
       throw new Error("Function not implemented.");
     },
     setTapValue: function (): void {
