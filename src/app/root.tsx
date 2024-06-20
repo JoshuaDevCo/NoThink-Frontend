@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { App } from "./app";
 import { authClient } from "../lib/apis/auth";
 import { useLaunchParams } from "@tma.js/sdk-react";
@@ -7,7 +7,7 @@ const Inner = () => {
   const [connected, setConnected] = useState(false);
   // const debug = params.startParam === "debug";
   // Enable debug mode to see all the methods sent and events received.
-  useEffect(() => {
+  useLayoutEffect(() => {
     import("eruda")
       .then((lib) => lib.default.init())
       .then(() => {
