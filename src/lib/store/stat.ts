@@ -5,6 +5,7 @@ export interface IStatStore {
   inited: boolean;
   init: () => void;
   refreshNumbers: () => void;
+  refreshTables: () => void;
   tappers: number;
   score: number;
   list: {
@@ -52,6 +53,17 @@ export const StatStore = createStore<IStatStore>((set) => ({
     });
     statApi.getTappers().then((res) => {
       set({ tappers: res.data });
+    });
+  },
+  refreshTables: () => {
+    statApi.getRankTable().then((res) => {
+      set({ list: res.data });
+    });
+    statApi.getInvitedRankTable().then((res) => {
+      set({ invited_list: res.data });
+    });
+    statApi.getPlacementInRankTable().then((res) => {
+      set({ place: res.data });
     });
   },
 }));

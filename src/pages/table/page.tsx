@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { CoinIcon } from "../../assets/coin/icon";
 import cn from "classnames";
 import { useLaunchParams } from "@tma.js/sdk-react";
@@ -10,7 +10,7 @@ export const TablePage = () => {
   const { initData } = useLaunchParams();
   const { counter, stat } = useGame();
   const { count, total_balance } = counter;
-  const { list, invited_list, place: _place } = stat;
+  const { list, invited_list, place: _place, refreshTables } = stat;
   const [activeTab, setActiveTab] = useState<"all" | "friends">("all");
   const [inviteId, setInviteId] = useState<string | null>(null);
 
@@ -42,6 +42,10 @@ export const TablePage = () => {
           ) + 1,
     [activeTab, _place, invited_list]
   );
+
+  useEffect(() => {
+    refreshTables();
+  }, []);
 
   return (
     <div className="absolute z-50 top-0 left-0 h-full w-full bg">

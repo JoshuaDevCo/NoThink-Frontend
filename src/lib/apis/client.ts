@@ -3,7 +3,7 @@ import axios from "axios";
 const client = axios.create({
   baseURL:
     import.meta.env.VITE_PUBLIC_API_URL ||
-    "https://006d-95-105-67-206.ngrok-free.app",
+    "https://6012-95-105-67-206.ngrok-free.app",
 });
 
 client.interceptors.request.use((config) => {

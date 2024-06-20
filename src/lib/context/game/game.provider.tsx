@@ -65,6 +65,9 @@ export const GameContext = createContext<IGameContext>({
     refreshNumbers: function (): void {
       throw new Error("Function not implemented.");
     },
+    refreshTables: function (): void {
+      throw new Error("Function not implemented.");
+    },
   },
   booster: {
     init: function (): void {
