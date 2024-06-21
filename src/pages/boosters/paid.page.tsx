@@ -121,8 +121,8 @@ export const BoosterPage = () => {
       validUntil: Math.round(Date.now() / 1000) + 600,
       messages: [
         {
-          address: "UQAyz0PWZt2Zb5qmOunVzaKBYhGBa366QBgZdBLZNK7UDvBz",
-          amount: String(booster.price * 1000000000),
+          address: import.meta.env.VITE_PUBLIC_RECEIVER_ADDRESS,
+          amount: String(booster.price * 1e9),
           payload: body.toBoc().toString("base64"),
           // payload: "te6cckEBAQEADAAAFAAAAABIZWxsbyGVgYQo",
         },
@@ -212,7 +212,7 @@ export const BoosterPage = () => {
                       >
                         {!tonConnectUI.connected &&
                         booster.denom === "ton" &&
-                        mineMaxBoosterLevel + 1 < booster.level ? (
+                        mineMaxBoosterLevel + 1 === booster.level ? (
                           <span>Connect Wallet</span>
                         ) : (
                           <>
