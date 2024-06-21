@@ -131,6 +131,7 @@ export const BoosterPage = () => {
     // console.log(transaction);
     return await tonConnectUI.sendTransaction(transaction);
   };
+  console.log();
 
   const balance = useMemo(() => total_balance + count, [total_balance, count]);
   return (
@@ -210,23 +211,32 @@ export const BoosterPage = () => {
                         }}
                         disabled={loading || balance < booster.price}
                       >
-                        {!tonConnectUI.connected &&
-                        booster.denom === "ton" &&
-                        mineMaxBoosterLevel + 1 === booster.level ? (
-                          <span>Connect Wallet</span>
-                        ) : (
+                        {booster.denom === "nothink" && (
                           <>
                             <span>Pay</span>
-                            {booster.denom === "nothink" && <CoinIcon />}
-                            {booster.denom === "ton" && <TonCoinIcon />}
+                            <CoinIcon />
                             <span>
                               {new Intl.NumberFormat().format(
                                 booster.price || 0
                               )}
-                              {booster.denom === "ton" && " TON"}
                             </span>
                           </>
                         )}
+                        {booster.denom === "ton" &&
+                          (!tonConnectUI.connected && mineMaxBoosterLevel + 1 === booster.level ? (
+                            <span>Connect Wallet</span>
+                          ) : (
+                            <>
+                              <span>Pay</span>
+                              <TonCoinIcon />
+                              <span>
+                                {new Intl.NumberFormat().format(
+                                  booster.price || 0
+                                )}
+                                {" TON"}
+                              </span>
+                            </>
+                          ))}
                       </button>
                     )}
                   </div>
