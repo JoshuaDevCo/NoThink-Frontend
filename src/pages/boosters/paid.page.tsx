@@ -113,7 +113,7 @@ export const BoosterPage = () => {
   const sendTransaction = async (user: number, booster: Booster) => {
     // console.log(user, booster);
 
-    let body = beginCell()
+    const body = beginCell()
       .storeInt(0, 32)
       .storeStringTail(String(user)) // write our text comment
       .endCell();
@@ -210,8 +210,11 @@ export const BoosterPage = () => {
                         }}
                         disabled={loading || balance < booster.price}
                       >
-                        {tonConnectUI.connected ||
+                        {!tonConnectUI.connected &&
+                        booster.denom === "ton" &&
                         mineMaxBoosterLevel + 1 < booster.level ? (
+                          <span>Connect Wallet</span>
+                        ) : (
                           <>
                             <span>Pay</span>
                             {booster.denom === "nothink" && <CoinIcon />}
@@ -223,8 +226,6 @@ export const BoosterPage = () => {
                               {booster.denom === "ton" && " TON"}
                             </span>
                           </>
-                        ) : (
-                          <span>Connect Wallet</span>
                         )}
                       </button>
                     )}
