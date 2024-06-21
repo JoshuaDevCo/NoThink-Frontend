@@ -129,7 +129,12 @@ export const BoosterPage = () => {
       ],
     };
     // console.log(transaction);
-    return await tonConnectUI.sendTransaction(transaction);
+    try {
+      return await tonConnectUI.sendTransaction(transaction);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   };
   console.log();
 
@@ -223,7 +228,8 @@ export const BoosterPage = () => {
                           </>
                         )}
                         {booster.denom === "ton" &&
-                          (!tonConnectUI.connected && mineMaxBoosterLevel + 1 === booster.level ? (
+                          (!tonConnectUI.connected &&
+                          mineMaxBoosterLevel + 1 === booster.level ? (
                             <span>Connect Wallet</span>
                           ) : (
                             <>
