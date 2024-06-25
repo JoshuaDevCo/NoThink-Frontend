@@ -118,9 +118,13 @@ export const IndexPage = () => {
             </div>
           </div>
           <div className="flex items-center justify-center relative">
-            {tap_value == 2 && (
-              <ZenPowerBoosterIcon className="zen-power-animation p-[10px] absolute top-[50%] left-[50%] z-0 w-[350px] h-[350px] button-bg-gradient rounded-full" />
-            )}
+            <ZenPowerBoosterIcon
+              className={cn(
+                "zen-power-animation p-[10px] absolute top-[50%] left-[50%] z-0 w-[350px] h-[350px] button-bg-gradient rounded-full",
+                { "opacity-0": tap_value != 2 }
+              )}
+            />
+
             <motion.button
               id="click_circle"
               ref={coinRef}

@@ -71,7 +71,7 @@ export const App = ({ connected }: { connected: boolean }) => {
             ],
           }}
           actionsConfiguration={{
-            twaReturnUrl: "https://t.me/my_nothink_bot/nothink",
+            twaReturnUrl: "https://t.me/no_think_coin_bot/startapp",
           }}
         >
           <Router location={location} navigator={reactNavigator}>
