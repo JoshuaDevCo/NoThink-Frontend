@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { MutlitapBoosterIcon } from "../../assets/boosters/multitap";
 import { ReactNode, useMemo, useState } from "react";
 import { EnergyLimitBoosterIcon } from "../../assets/boosters/energy_limit";
@@ -91,6 +91,7 @@ const DESCRIPTIONS: Record<string, string> = {
 
 export const BoosterPage = () => {
   const { key } = useParams();
+  const navigate = useNavigate();
   const { booster, counter } = useGame();
   const { list, mine, use } = booster;
   const { total_balance, count } = counter;
@@ -184,7 +185,7 @@ export const BoosterPage = () => {
                           if (booster.denom == "ton") {
                             // tonConnectUI.disconnect();
                             if (!tonConnectUI.connected)
-                              tonConnectUI.openModal();
+                              navigate("/connections");
                             await sendTransaction(
                               Number(params.initData?.user?.id),
                               booster
