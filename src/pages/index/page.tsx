@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { CoinIcon } from "../../assets/coin/icon";
 import { IconNavigationCup } from "../../assets/navigation/cup";
 import { IconNavigationLeafCoin } from "../../assets/navigation/leaf-coin";
@@ -15,7 +15,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { BackgroundVideo } from "../../components/background-video/background-video";
 import { useGameTick } from "../../lib/hooks/useGameTick";
 import { ZenPowerBoosterIcon } from "../../assets/boosters/zen_power";
-import { postEvent } from "@tma.js/sdk-react";
+import { on, postEvent } from "@tma.js/sdk-react";
 
 const DEBUG = false;
 
@@ -26,6 +26,7 @@ const getRandomRange = (min: number, max: number) => {
 export const IndexPage = () => {
   const coinRef = useRef<HTMLButtonElement>(null);
   const frameTime = useGameTick();
+  const navigate = useNavigate();
   const { counter, stat } = useGame();
   const {
     click,
@@ -70,6 +71,15 @@ export const IndexPage = () => {
       setLastUpdate(performance.now());
     }
   }, [frameTime]);
+
+  useEffect(() => {
+    const handler = on("settings_button_pressed", () => {
+      navigate("/connections");
+    });
+    return () => {
+      handler();
+    };
+  }, []);
 
   return (
     <>

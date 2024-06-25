@@ -21,6 +21,7 @@ export const App = ({ connected }: { connected: boolean }) => {
   useEffect(() => {
     tmaNavigator.attach();
     postEvent("web_app_expand");
+    postEvent("web_app_setup_settings_button", { is_visible: true });
 
     return () => tmaNavigator.detach();
   }, [tmaNavigator]);
