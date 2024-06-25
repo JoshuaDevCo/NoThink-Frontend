@@ -11,6 +11,7 @@ import { IndexPage } from "../pages/index";
 import { NotificationProvider } from "../lib/context/notification/notification.provider";
 import { postEvent } from "@tma.js/sdk";
 import { THEME, TonConnectUIProvider } from "@tonconnect/ui-react";
+import { ConnectionsPage } from "../pages/connections/page";
 
 export const App = ({ connected }: { connected: boolean }) => {
   const tmaNavigator = useMemo(() => initNavigator("app-navigation-state"), []);
@@ -85,6 +86,7 @@ export const App = ({ connected }: { connected: boolean }) => {
                     </Route>
                     <Route path="/table" Component={TablePage} />
                     <Route path="/earn" Component={EarnPage} />
+                    <Route path="/connections" Component={ConnectionsPage} />
                   </Route>
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
